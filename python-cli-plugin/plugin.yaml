@@ -1,0 +1,25 @@
+name: python-cli-plugin
+description: Adds the capability of a CLI to the python-app-template
+display-name: python-cli-plugin
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#category
+compatibility:
+  - java
+  - spring
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#technologies
+  - "Api"
+types:
+  - app
+inputs:
+  - label: CLI Command Name
+    type: text
+    name: cli_command_name
+    default: mycli
+global-computed-inputs:
+  cli_command_name_lower: "{{inputs.cli_command_name|lower}}"
+#TODO Adicionar itens no setup.py necessários para o click funcionar
+
