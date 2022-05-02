@@ -21,5 +21,26 @@ inputs:
     default: mycli
 global-computed-inputs:
   cli_command_name_lower: "{{inputs.cli_command_name|lower}}"
-#TODO Adicionar itens no setup.py necessários para o click funcionar
-
+hooks:
+  - type: edit
+    trigger: before-render
+    path: "src/setup.py"
+    changes:
+      - search:
+          string: ")"
+          insert-before:
+            snippet: snippets/entrypoints
+          when:
+            not-exists: "'console_scripts'"
+      - search:
+          string: "'pytest'"
+          replace-by:
+            value: "'pytest', 'click', 'pyinstaller'"
+          when:
+            not-exists: "'click', 'pyinstaller'"
+      - search:
+          string: "packages=['{{project_name_sanitized}}']"
+          replace-by:
+            value: "packages=['{{project_name_sanitized}}', '{{project_name_sanitized}}.commands', '{{project_name_sanitized}}.commands.say']"
+          when:
+            not-exists: "'{{project_name_sanitized}}.commands', '{{project_name_sanitized}}.commands.say'"

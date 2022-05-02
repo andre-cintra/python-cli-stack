@@ -5,5 +5,5 @@ setup(
     version='{{project_version}}',
     description='{{inputs.project_description}}',
     packages=['{{project_name_sanitized}}'],  #same as name
-    install_requires=['pytest'], #external packages as dependencies
+    install_requires=['wheel', 'pytest'], #external packages as dependencies
 )
