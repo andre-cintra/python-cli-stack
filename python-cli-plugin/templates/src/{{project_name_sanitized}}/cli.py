@@ -26,7 +26,6 @@ def cli(ctx):
 
 cli.add_command(say)
 
-# After every command execution
 @cli.result_callback()
 @click.pass_context
 def process_result(*args, **kwargs):

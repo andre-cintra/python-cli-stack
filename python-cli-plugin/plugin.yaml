@@ -35,9 +35,9 @@ hooks:
       - search:
           string: "'pytest'"
           replace-by:
-            value: "'pytest', 'click', 'pyinstaller'"
+            value: "'pytest', 'click'"
           when:
-            not-exists: "'click', 'pyinstaller'"
+            not-exists: "'click'"
       - search:
           string: "packages=['{{project_name_sanitized}}']"
           replace-by:

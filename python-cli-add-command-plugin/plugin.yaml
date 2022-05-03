@@ -1,0 +1,65 @@
+name: python-cli-add-command-plugin
+description: Add a new command to a project based on python-cli-plugin
+display-name: python-cli-add-command-plugin
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#category
+compatibility:
+  - java
+  - spring
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#technologies
+  - "Api"
+types:
+  - app
+inputs:
+  - label: verb
+    type: text
+    name: verb
+    default: new_command_verb
+  - label: verb_description
+    type: text
+    name: verb_description
+    default: Describe here this command.
+  - label: domain
+    type: text
+    name: domain
+    default: new_command_domain
+  - label: argument
+    type: text
+    name: argument
+    default: argument_name
+  - label: domain_description
+    type: text
+    name: domain_description
+    default: The description for your command
+hooks:
+  - type: edit
+    trigger: before-render
+    path: "src/{{project_name_sanitized}}/cli.py"
+    changes:
+      - insert:
+          line: 2
+          value: "from {{project_name_sanitized}}.commands.{{inputs.verb}} import {{inputs.verb}}\n"
+          when:
+            not-exists: "from {{project_name_sanitized}}.commands.{{inputs.verb}} import {{inputs.verb}}"
+      - search:
+          string: "@cli.result_callback()"
+          insert-before:
+            value: "cli.add_command({{inputs.verb}})\n\n"
+          when:
+            not-exists: "cli.add_command({{inputs.verb}})"
+  - type: edit
+    trigger: before-render
+    path: "src/setup.py"
+    changes:
+      - search:
+          string: "'{{project_name_sanitized}}.commands'"
+          replace-by:
+            value: "'{{project_name_sanitized}}.commands', '{{project_name_sanitized}}.commands.{{inputs.verb}}'"
+          when:
+            not-exists: "'{{project_name_sanitized}}.commands.{{inputs.verb}}'"
+  
+  
