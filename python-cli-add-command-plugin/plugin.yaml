@@ -15,26 +15,26 @@ technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/
 types:
   - app
 inputs:
-  - label: verb
+  - label: command
     type: text
-    name: verb
-    default: new_command_verb
-  - label: verb_description
+    name: command
+    default: command_name
+  - label: command_description
     type: text
-    name: verb_description
-    default: Describe here this command.
-  - label: domain
+    name: command_description
+    default: Describe what the main command does.
+  - label: subcommand
     type: text
-    name: domain
-    default: new_command_domain
+    name: subcommand
+    default: subcommand_name
+  - label: subcommand_description
+    type: text
+    name: subcommand_description
+    default: The description for your subcommand.
   - label: argument
     type: text
     name: argument
     default: argument_name
-  - label: domain_description
-    type: text
-    name: domain_description
-    default: The description for your command
 hooks:
   - type: edit
     trigger: before-render
@@ -42,15 +42,15 @@ hooks:
     changes:
       - insert:
           line: 2
-          value: "from {{project_name_sanitized}}.commands.{{inputs.verb}} import {{inputs.verb}}\n"
+          value: "from {{project_name_sanitized}}.commands.{{inputs.command}} import {{inputs.command}}\n"
           when:
-            not-exists: "from {{project_name_sanitized}}.commands.{{inputs.verb}} import {{inputs.verb}}"
+            not-exists: "from {{project_name_sanitized}}.commands.{{inputs.command}} import {{inputs.command}}"
       - search:
           string: "@cli.result_callback()"
           insert-before:
-            value: "cli.add_command({{inputs.verb}})\n\n"
+            value: "cli.add_command({{inputs.command}})\n\n"
           when:
-            not-exists: "cli.add_command({{inputs.verb}})"
+            not-exists: "cli.add_command({{inputs.command}})"
   - type: edit
     trigger: before-render
     path: "src/setup.py"
@@ -58,8 +58,8 @@ hooks:
       - search:
           string: "'{{project_name_sanitized}}.commands'"
           replace-by:
-            value: "'{{project_name_sanitized}}.commands', '{{project_name_sanitized}}.commands.{{inputs.verb}}'"
+            value: "'{{project_name_sanitized}}.commands', '{{project_name_sanitized}}.commands.{{inputs.command}}'"
           when:
-            not-exists: "'{{project_name_sanitized}}.commands.{{inputs.verb}}'"
+            not-exists: "'{{project_name_sanitized}}.commands.{{inputs.command}}'"
   
   
